@@ -1,0 +1,10 @@
+GET (Listar todos os times)
+curl.exe -X GET http://127.0.0.1:5000/times
+2. POST (Cadastrar um novo time)
+curl.exe -X POST http://127.0.0.1:5000/times -H "Content-Type: application/json" -d '{"nome":"MIBR", "sigla":"MIBR", "pais":"Brasil", "regiao":"SA", "ano_fundacao":2003, "ranking":15}'
+3. GET por ID (Buscar o time criado)
+curl.exe -X GET http://127.0.0.1:5000/times/1
+4. PUT (Atualizar dados de um time)
+curl.exe -X PUT http://127.0.0.1:5000/times/1 -H "Content-Type: application/json" -d '{"nome":"MIBR Red", "sigla":"MIBR", "pais":"Brasil", "regiao":"SA", "ano_fundacao":2003, "ranking":10}'
+5. DELETE (Remover um time)
+curl.exe -X DELETE http://127.0.0.1:5000/times/1

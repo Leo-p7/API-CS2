@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS2 Teams API - Painel</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #0f1115;
+      color: #e1e6ed;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #161920;
+      border-bottom: 2px solid #00e676;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      color: #00e676;
+      letter-spacing: 1px;
+    }
+
+    header span {
+      background-color: #222733;
+      color: #8a99ad;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+
+    main {
+      flex: 1;
+      padding: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .hero h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: #8a99ad;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: #181c24;
+      border: 1px solid #282f3d;
+      border-radius: 8px;
+      padding: 20px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #00e676;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #282f3d;
+      padding-bottom: 10px;
+    }
+
+    .card-header h3 {
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .tag-ranking {
+      background-color: #00e676;
+      color: #000;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+
+    .card-body p {
+      margin: 8px 0;
+      font-size: 0.95rem;
+      color: #a0aec0;
+    }
+
+    .card-body strong {
+      color: #e1e6ed;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #161920;
+      color: #8a99ad;
+      font-size: 0.85rem;
+      border-top: 1px solid #282f3d;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>CS2 TEAMS API</h1>
+    <span>Avaliação 1 - MVC Flask</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2>Times Cadastrados no Banco de Dados</h2>
+      <p>Dados servidos via REST API (Flask + MySQL)</p>
+    </section>
+
+    <!-- O container onde os cards serão gerados dinamicamente -->
+    <section class="grid" id="container-times"></section>
+  </main>
+
+  <script>
+    async function carregarTimes() {
+      const container = document.getElementById('container-times');
+      
+      try {
+        const resposta = await fetch('http://127.0.0.1:5000/times');
+        const times = await resposta.json();
+        
+        container.innerHTML = '';
+
+        times.forEach(time => {
+          const card = document.createElement('article');
+          card.className = 'card';
+          card.innerHTML = `
+            <div class="card-header">
+              <h3>${time.nome} (${time.sigla})</h3>
+              <span class="tag-ranking">#${time.ranking}</span>
+            </div>
+            <div class="card-body">
+              <p><strong>País:</strong> ${time.pais}</p>
+              <p><strong>Região:</strong> ${time.regiao}</p>
+              <p><strong>Ano de Fundação:</strong> ${time.ano_fundacao}</p>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      } catch (erro) {
+        container.innerHTML = '<p style="color: #ff5252;">Erro ao conectar com a API Flask. Certifique-se de que o servidor está rodando.</p>';
+      }
+    }
+
+    // Executa ao carregar a página
+    carregarTimes();
+  </script>
